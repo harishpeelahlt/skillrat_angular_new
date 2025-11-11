@@ -1,0 +1,13 @@
+<div class="min-h-screen bg-gray-50 p-10">
+  <div class="max-w-2xl mx-auto bg-white rounded-xl shadow p-8">
+    <h2 class="text-xl font-semibold mb-4">Profile</h2>
+    <div *ngIf="user(); else empty" class="space-y-2">
+      <div><span class="text-gray-500">Name:</span> {{ user()?.name }}</div>
+      <div><span class="text-gray-500">Role:</span> {{ user()?.role }}</div>
+      <div><span class="text-gray-500">ID:</span> {{ user()?.id }}</div>
+    </div>
+    <ng-template #empty>
+      <div class="text-gray-500">Not logged in.</div>
+    </ng-template>
+  </div>
+</div>
