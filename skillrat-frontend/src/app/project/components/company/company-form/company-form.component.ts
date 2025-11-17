@@ -4,29 +4,30 @@ import { trigger, style, transition, animate } from '@angular/animations';
 import { CompanyOnboardPayload, CompanyService } from '../../../services/company.service';
 
 @Component({
-  selector: 'app-company-form',
-  templateUrl: './company-form.component.html',
-  styleUrls: ['./company-form.component.css'],
-  animations: [
-    trigger('backdrop', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('150ms ease-out', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('150ms ease-in', style({ opacity: 0 }))
-      ])
-    ]),
-    trigger('modal', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }),
-        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
-      ]),
-      transition(':leave', [
-        animate('150ms ease-in', style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }))
-      ])
-    ])
-  ]
+    selector: 'app-company-form',
+    templateUrl: './company-form.component.html',
+    styleUrls: ['./company-form.component.css'],
+    animations: [
+        trigger('backdrop', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('150ms ease-out', style({ opacity: 1 }))
+            ]),
+            transition(':leave', [
+                animate('150ms ease-in', style({ opacity: 0 }))
+            ])
+        ]),
+        trigger('modal', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }),
+                animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
+            ]),
+            transition(':leave', [
+                animate('150ms ease-in', style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }))
+            ])
+        ])
+    ],
+    standalone: false
 })
 export class CompanyFormComponent implements OnInit {
   @Output() closed = new EventEmitter<boolean>();

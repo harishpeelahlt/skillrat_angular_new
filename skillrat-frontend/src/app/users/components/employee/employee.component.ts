@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { EmployeesService, EmployeeDto, PageResponse } from '../../services/employees.service';
 
 @Component({
-  selector: 'app-employee',
-  templateUrl: './employee.component.html',
-  styleUrl: './employee.component.css'
+    selector: 'app-employee',
+    templateUrl: './employee.component.html',
+    styleUrl: './employee.component.css',
+    standalone: false
 })
 export class EmployeeComponent implements OnInit {
   employees: EmployeeDto[] = [];

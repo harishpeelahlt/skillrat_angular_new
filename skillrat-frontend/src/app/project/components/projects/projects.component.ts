@@ -5,9 +5,10 @@ import { CurrentUserResponse } from '../../../auth/Models/auth.interfaces';
 import { PageResponse, Project, ProjectService } from '../../services/project.service';
 
 @Component({
-  selector: 'app-projects',
-  styleUrl: './projects.component.css',
-  templateUrl: './projects.component.html'
+    selector: 'app-projects',
+    styleUrl: './projects.component.css',
+    templateUrl: './projects.component.html',
+    standalone: false
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   showProjectForm = false;

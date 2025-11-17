@@ -21,29 +21,30 @@ interface CreateUserPayload {
 }
 
 @Component({
-  selector: 'app-users-form',
-  templateUrl: './users-form.component.html',
-  styleUrl: './users-form.component.css',
-  animations: [
-    trigger('backdrop', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('150ms ease-out', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('150ms ease-in', style({ opacity: 0 }))
-      ])
-    ]),
-    trigger('modal', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }),
-        animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
-      ]),
-      transition(':leave', [
-        animate('150ms ease-in', style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }))
-      ])
-    ])
-  ]
+    selector: 'app-users-form',
+    templateUrl: './users-form.component.html',
+    styleUrl: './users-form.component.css',
+    animations: [
+        trigger('backdrop', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('150ms ease-out', style({ opacity: 1 }))
+            ]),
+            transition(':leave', [
+                animate('150ms ease-in', style({ opacity: 0 }))
+            ])
+        ]),
+        trigger('modal', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }),
+                animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
+            ]),
+            transition(':leave', [
+                animate('150ms ease-in', style({ opacity: 0, transform: 'translateY(16px) scale(0.98)' }))
+            ])
+        ])
+    ],
+    standalone: false
 })
 export class UsersFormComponent implements OnInit, OnDestroy {
   @Output() closed = new EventEmitter<boolean>();

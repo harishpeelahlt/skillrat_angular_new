@@ -4,9 +4,10 @@ import { Incident, IncidentComment, IncidentService } from '../../services/incid
 import { EmployeeDto, EmployeesService } from '../../../users/services/employees.service';
 
 @Component({
-  selector: 'app-incident-details',
-  templateUrl: './incident-details.component.html',
-  styleUrl: './incident-details.component.css'
+    selector: 'app-incident-details',
+    templateUrl: './incident-details.component.html',
+    styleUrl: './incident-details.component.css',
+    standalone: false
 })
 export class IncidentDetailsComponent implements OnInit {
   isEditingDescription = false;

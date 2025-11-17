@@ -6,9 +6,10 @@ import { PageResponse, Project, ProjectService } from '../../../project/services
 import { IncidentsContextService } from '../../services/incidents-context.service';
 
 @Component({
-  selector: 'app-incidents-layout',
-  templateUrl: './incidents-layout.component.html',
-  styleUrl: './incidents-layout.component.css'
+    selector: 'app-incidents-layout',
+    templateUrl: './incidents-layout.component.html',
+    styleUrl: './incidents-layout.component.css',
+    standalone: false
 })
 export class IncidentsLayoutComponent implements OnInit, OnDestroy {
   projects: Project[] = [];

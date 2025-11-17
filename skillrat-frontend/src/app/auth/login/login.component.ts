@@ -5,9 +5,10 @@ import { AuthserviceService } from '../authservice/authservice.service';
 import { LoginPayload, RegisterPayload } from '../Models/auth.interfaces';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: false
 })
 export class LoginComponent {
   showRegister = false;
