@@ -1,0 +1,94 @@
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm" @backdrop>
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 h-[85vh] max-h-[85vh] flex flex-col" @modal [ngClass]="{ 'shake-modal': showShake }">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200 flex-none">
+      <div>
+        <h2 class="font-semibold text-neutral-800" style="font-size: 2em;">Create new project</h2>
+      </div>
+      <button type="button" class="text-neutral-400 hover:text-neutral-600" (click)="close(false)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="px-6 pt-4 pb-6 space-y-6 overflow-y-auto flex-1">
+      <!-- Project Details -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Project name</label>
+          <input formControlName="name" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('name')?.invalid && form.get('name')?.touched, 'border-neutral-300': !(form.get('name')?.invalid && form.get('name')?.touched) }" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Project code</label>
+          <input formControlName="code" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('code')?.invalid && form.get('code')?.touched, 'border-neutral-300': !(form.get('code')?.invalid && form.get('code')?.touched) }" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Start date</label>
+          <input formControlName="startDate" type="date"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('startDate')?.invalid && form.get('startDate')?.touched, 'border-neutral-300': !(form.get('startDate')?.invalid && form.get('startDate')?.touched) }" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">End date</label>
+          <input formControlName="endDate" type="date"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('endDate')?.invalid && form.get('endDate')?.touched, 'border-neutral-300': !(form.get('endDate')?.invalid && form.get('endDate')?.touched) }" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-neutral-600 mb-1">Description</label>
+        <textarea formControlName="description" rows="3"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('description')?.invalid && form.get('description')?.touched, 'border-neutral-300': !(form.get('description')?.invalid && form.get('description')?.touched) }"></textarea>
+      </div>
+
+      <!-- Client Details -->
+      <div class="pt-2 border-t border-neutral-200">
+        <h3 class="text-sm font-semibold text-neutral-800 mb-3">Client details</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" formGroupName="client">
+          <div>
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Client name</label>
+            <input formControlName="name" type="text"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('client.name')?.invalid && form.get('client.name')?.touched, 'border-neutral-300': !(form.get('client.name')?.invalid && form.get('client.name')?.touched) }" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Primary contact email</label>
+            <input formControlName="primaryContactEmail" type="email"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('client.primaryContactEmail')?.invalid && form.get('client.primaryContactEmail')?.touched, 'border-neutral-300': !(form.get('client.primaryContactEmail')?.invalid && form.get('client.primaryContactEmail')?.touched) }" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Secondary contact email</label>
+            <input formControlName="secondaryContactEmail" type="email"
+                   class="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300" />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end space-x-3 pt-2 flex-none">
+        <button type="button" class="px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-800" (click)="close(false)">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center"
+                style="background-color: blue;"
+                [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">Create project</span>
+          <span *ngIf="isSubmitting">Saving...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

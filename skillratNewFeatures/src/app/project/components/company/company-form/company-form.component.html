@@ -1,0 +1,120 @@
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm" @backdrop>
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[85vh] flex flex-col"
+       @modal
+       [ngClass]="{ 'shake-modal': showShake }">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200 flex-none">
+      <div>
+        <h2 class="font-semibold text-neutral-800" style="font-size: 2em;">Onboard company</h2>
+      </div>
+      <button type="button" class="text-neutral-400 hover:text-neutral-600" (click)="close(false)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="px-6 pt-4 pb-6 space-y-6 overflow-y-auto flex-1">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Name</label>
+          <input formControlName="name" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('name')?.invalid && form.get('name')?.touched, 'border-neutral-300': !(form.get('name')?.invalid && form.get('name')?.touched) }" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Type</label>
+          <select formControlName="type"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('type')?.invalid && form.get('type')?.touched, 'border-neutral-300': !(form.get('type')?.invalid && form.get('type')?.touched) }">
+            <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Contact email</label>
+          <input formControlName="contactEmail" type="email"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('contactEmail')?.invalid && form.get('contactEmail')?.touched, 'border-neutral-300': !(form.get('contactEmail')?.invalid && form.get('contactEmail')?.touched) }" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Contact number</label>
+          <input formControlName="contactPhone" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('contactPhone')?.invalid && form.get('contactPhone')?.touched, 'border-neutral-300': !(form.get('contactPhone')?.invalid && form.get('contactPhone')?.touched) }" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Website</label>
+          <input formControlName="website" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('website')?.invalid && form.get('website')?.touched, 'border-neutral-300': !(form.get('website')?.invalid && form.get('website')?.touched) }" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Group name</label>
+          <input formControlName="groupName" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('groupName')?.invalid && form.get('groupName')?.touched, 'border-neutral-300': !(form.get('groupName')?.invalid && form.get('groupName')?.touched) }" />
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-neutral-200" formGroupName="address">
+        <h3 class="text-sm font-semibold text-neutral-800 mb-3">Address</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Address line 1</label>
+            <input formControlName="line1" type="text"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('address.line1')?.invalid && form.get('address.line1')?.touched, 'border-neutral-300': !(form.get('address.line1')?.invalid && form.get('address.line1')?.touched) }" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Address line 2</label>
+            <input formControlName="line2" type="text"
+                   class="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-600 mb-1">City</label>
+            <input formControlName="city" type="text"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('address.city')?.invalid && form.get('address.city')?.touched, 'border-neutral-300': !(form.get('address.city')?.invalid && form.get('address.city')?.touched) }" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-600 mb-1">State</label>
+            <input formControlName="state" type="text"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('address.state')?.invalid && form.get('address.state')?.touched, 'border-neutral-300': !(form.get('address.state')?.invalid && form.get('address.state')?.touched) }" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Country</label>
+            <input formControlName="country" type="text"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('address.country')?.invalid && form.get('address.country')?.touched, 'border-neutral-300': !(form.get('address.country')?.invalid && form.get('address.country')?.touched) }" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-600 mb-1">Postal code</label>
+            <input formControlName="postalCode" type="text"
+                   class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                   [ngClass]="{ 'border-red-500': form.get('address.postalCode')?.invalid && form.get('address.postalCode')?.touched, 'border-neutral-300': !(form.get('address.postalCode')?.invalid && form.get('address.postalCode')?.touched) }" />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+        {{ errorMessage }}
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-2 flex-none">
+        <button type="button" class="px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-800" (click)="close(false)">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center"
+                [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">Onboard company</span>
+          <span *ngIf="isSubmitting">Saving...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

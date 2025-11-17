@@ -1,0 +1,31 @@
+p {
+  margin: 0;
+}
+
+.active {
+  color: rgb(67 56 202 / var(--tw-text-opacity, 1));
+}
+
+.active mat-icon {
+  color: rgb(67 56 202 / var(--tw-text-opacity, 1));
+}
+
+h1 , p {
+    margin: 0;
+}
+
+h3 {
+    font-size: 1.7em;
+}
+
+mat-icon {
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-class {
+    background-color: blue;
+    color: white;
+}

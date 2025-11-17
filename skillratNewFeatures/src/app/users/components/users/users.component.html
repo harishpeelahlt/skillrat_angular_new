@@ -1,0 +1,124 @@
+<div class="bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6 px-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Users</h1>
+      <p class="text-sm text-gray-600 mt-1">
+        Admin view of application users, their roles and contact details.
+      </p>
+    </div>
+     <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openUserForm()">
+        <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+        New User
+      </button>
+  </div>
+
+  <!-- Search + Filters -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 px-8">
+    <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+      <!-- Search Input -->
+      <div class="relative flex-1 max-w-md">
+        <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</mat-icon>
+        <input
+          type="text"
+          placeholder="Search by id, name or email"
+          class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </div>
+
+      <!-- Role Dropdown -->
+      <div class="flex items-center gap-2">
+        <mat-icon class="text-gray-500">group</mat-icon>
+        <select
+          class="w-48 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          [(ngModel)]="selectedRole"
+          (ngModelChange)="onRoleChange($event)"
+        >
+          <option value="all">All</option>
+          <option *ngFor="let role of roles" [value]="role">
+            {{ role }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden px-8">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 font-medium">User ID</th>
+            <th class="px-6 py-3 font-medium">Name</th>
+            <th class="px-6 py-3 font-medium">Role</th>
+            <th class="px-6 py-3 font-medium">Email</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200" *ngIf="!isLoadingUsers && users?.length; else usersState">
+          <tr class="hover:bg-gray-50" *ngFor="let user of users; let i = index">
+            <td class="px-6 py-4 font-medium text-indigo-600">
+              USER-{{ page * size + i + 1 }}
+            </td>
+            <td class="px-6 py-4 font-medium text-gray-900">
+              {{ user.firstName }} {{ user.lastName }}
+            </td>
+            <td class="px-6 py-4 text-gray-700">
+              {{ getUserRoles(user) }}
+            </td>
+            <td class="px-6 py-4 text-gray-700">{{ user.email }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #usersState>
+      <div class="px-6 py-6 text-sm text-gray-500 flex items-center justify-center" *ngIf="isLoadingUsers">
+        Loading users...
+      </div>
+      <div class="px-6 py-6 text-sm text-red-600" *ngIf="!isLoadingUsers && usersError">
+        {{ usersError }}
+      </div>
+      <div class="px-6 py-6 text-sm text-gray-500" *ngIf="!isLoadingUsers && !usersError && (!users || !users.length)">
+        No users found.
+      </div>
+    </ng-template>
+
+    <!-- Pagination -->
+    <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50">
+      <p class="text-sm text-gray-600">
+        Page {{ (totalPages ? page + 1 : 0) }} of {{ totalPages || 0 }} · Total users: {{ totalElements }}
+      </p>
+      <div class="flex items-center gap-2">
+        <button
+          mat-stroked-button
+          class="px-4 py-1.5 text-sm"
+          (click)="previousPage()"
+          [disabled]="page === 0 || totalPages <= 1 || isLoadingUsers"
+        >
+          Prev
+        </button>
+        <button
+          mat-stroked-button
+          class="px-4 py-1.5 text-sm"
+          disabled
+        >
+          {{ totalPages ? (page + 1) : 0 }}
+        </button>
+        <button
+          mat-stroked-button
+          class="px-4 py-1.5 text-sm"
+          (click)="nextPage()"
+          [disabled]="page >= totalPages - 1 || totalPages <= 1 || isLoadingUsers"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Form Modal -->
+  <app-users-form *ngIf="showUserForm" (closed)="onUserFormClosed($event)"></app-users-form>
+</div>

@@ -1,0 +1,119 @@
+<div class="bg-neutral-50 min-h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-8 py-4">
+    <div>
+      <h1 class="font-bold text-neutral-800" style="font-size: 25px;">Company</h1>
+      <p class="text-sm text-neutral-600 mt-1">Manage all onboarded companies and their details.</p>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button class="flex items-center px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
+        <mat-icon class="mr-2 text-neutral-500" style="font-size: 16px;">calendar_today</mat-icon>
+        This week
+      </button>
+      <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openCompanyForm()">
+        <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+        Onboard Company
+      </button>
+    </div>
+  </div>
+
+  <!-- Companies Section -->
+  <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden px-8 py-4">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
+      <h2 class="text-lg font-semibold text-neutral-800">Companies</h2>
+      <div class="flex items-center space-x-4">
+        <a href="#" class="text-sm font-medium text-primary-600 hover:text-primary-700">View all</a>
+        <span class="text-sm font-medium text-neutral-500">Quick actions</span>
+      </div>
+    </div>
+
+    <!-- Table Header -->
+    <div class="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider bg-neutral-50">
+      <div class="col-span-4">Company</div>
+      <div class="col-span-3">Industry</div>
+      <div class="col-span-2">Location</div>
+      <div class="col-span-2">Status</div>
+      <div class="col-span-1"></div>
+    </div>
+
+    <!-- Company Rows (dummy data) -->
+    <div class="divide-y divide-neutral-200">
+      <!-- Row 1 -->
+      <div class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors">
+        <div class="col-span-4">
+          <p class="text-sm font-medium text-neutral-800">Acme Corp</p>
+          <p class="text-xs text-neutral-500">Enterprise software solutions</p>
+        </div>
+        <div class="col-span-3 flex items-center">
+          <span class="text-xs font-medium text-neutral-700">Technology</span>
+        </div>
+        <div class="col-span-2 flex items-center">
+          <span class="text-xs font-medium text-neutral-700">San Francisco, CA</span>
+        </div>
+        <div class="col-span-2 flex items-center">
+          <span class="flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-600 mr-1"></span>
+            Active
+          </span>
+        </div>
+        <div class="col-span-1 flex justify-end">
+          <button mat-icon-button>
+            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors">
+        <div class="col-span-4">
+          <p class="text-sm font-medium text-neutral-800">Global Retail Inc.</p>
+          <p class="text-xs text-neutral-500">Multi-channel retail operations</p>
+        </div>
+        <div class="col-span-3 flex items-center">
+          <span class="text-xs font-medium text-neutral-700">Retail</span>
+        </div>
+        <div class="col-span-2 flex items-center">
+          <span class="text-xs font-medium text-neutral-700">London, UK</span>
+        </div>
+        <div class="col-span-2 flex items-center">
+          <span class="flex items-center px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-orange-600 mr-1"></span>
+            Onboarding
+          </span>
+        </div>
+        <div class="col-span-1 flex justify-end">
+          <button mat-icon-button>
+            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors">
+        <div class="col-span-4">
+          <p class="text-sm font-medium text-neutral-800">HealthPlus</p>
+          <p class="text-xs text-neutral-500">Healthcare and wellness services</p>
+        </div>
+        <div class="col-span-3 flex items-center">
+          <span class="text-xs font-medium text-neutral-700">Healthcare</span>
+        </div>
+        <div class="col-span-2 flex items-center">
+          <span class="text-xs font-medium text-neutral-700">Bangalore, IN</span>
+        </div>
+        <div class="col-span-2 flex items-center">
+          <span class="flex items-center px-2 py-1 text-xs font-medium text-neutral-700 bg-neutral-200 rounded-full">
+            <span class="w-1.5 h-1.5 rounded-full bg-neutral-500 mr-1"></span>
+            Inactive
+          </span>
+        </div>
+        <div class="col-span-1 flex justify-end">
+          <button mat-icon-button>
+            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-company-form *ngIf="showCompanyForm" (closed)="onCompanyFormClosed($event)"></app-company-form>
+</div>

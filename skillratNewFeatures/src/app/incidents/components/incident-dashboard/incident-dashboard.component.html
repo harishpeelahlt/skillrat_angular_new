@@ -1,0 +1,222 @@
+<div class="bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6 px-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900" style="font-size: 1em;">ITSM Dashboard</h1>
+      <p class="text-sm text-gray-600 mt-1">
+        Manage and track service incidents
+      </p>
+      <p class="text-xs text-gray-500 mt-1">
+        High level snapshot of total incidents, SLAs, and team performance.
+      </p>
+    </div>
+     <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openIncidentForm()">
+        <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+        New Incident
+      </button>
+  </div>
+
+  <!-- Metric Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6 px-8">
+    <!-- Total Incidents -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+        Total Incidents
+      </p>
+      <p class="text-3xl font-bold text-gray-900">142</p>
+      <p class="text-xs text-green-600 mt-1">+8 today</p>
+    </div>
+
+    <!-- Open -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+        Open
+      </p>
+      <p class="text-3xl font-bold text-gray-900">28</p>
+      <p class="text-xs text-orange-600 mt-1">Needs attention</p>
+    </div>
+
+    <!-- In Progress -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+        In Progress
+      </p>
+      <p class="text-3xl font-bold text-gray-900">45</p>
+      <p class="text-xs text-blue-600 mt-1">Being resolved</p>
+    </div>
+
+    <!-- Resolved -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+        Resolved
+      </p>
+      <p class="text-3xl font-bold text-gray-900">69</p>
+      <p class="text-xs text-green-600 mt-1">48.6% resolved</p>
+    </div>
+
+    <!-- Avg Response Time -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+        Avg. Response Time
+      </p>
+      <p class="text-3xl font-bold text-gray-900">2.4h</p>
+      <p class="text-xs text-red-600 mt-1">-15% vs last week</p>
+    </div>
+  </div>
+
+  <!-- Table + Recent Updates -->
+  <div class="grid grid-cols-1 gap-6 px-8">
+    <!-- Full Width Table (2/3 on xl) -->
+    <div class="xl:col-span-2">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Filters & Tabs -->
+        <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div class="flex gap-1 flex-wrap">
+            <button
+              mat-stroked-button
+              class="rounded-full !text-sm !px-4 !py-1 !border-gray-300"
+              [class.!bg-gray-900]="selectedPriority === 'all'"
+              [class.!text-white]="selectedPriority === 'all'"
+            >
+              All
+            </button>
+            <button
+              mat-stroked-button
+              class="rounded-full !text-sm !px-4 !py-1 !border-gray-300"
+              [class.!bg-red-600]="selectedPriority === 'critical'"
+              [class.!text-white]="selectedPriority === 'critical'"
+            >
+              Critical
+            </button>
+            <button
+              mat-stroked-button
+              class="rounded-full !text-sm !px-4 !py-1 !border-gray-300"
+              [class.!bg-orange-500]="selectedPriority === 'high'"
+              [class.!text-white]="selectedPriority === 'high'"
+            >
+              High
+            </button>
+            <button
+              mat-stroked-button
+              class="rounded-full !text-sm !px-4 !py-1 !border-gray-300"
+              [class.!bg-yellow-500]="selectedPriority === 'medium'"
+              [class.!text-white]="selectedPriority === 'medium'"
+            >
+              Medium
+            </button>
+            <button
+              mat-stroked-button
+              class="rounded-full !text-sm !px-4 !py-1 !border-gray-300"
+              [class.!bg-green-500]="selectedPriority === 'low'"
+              [class.!text-white]="selectedPriority === 'low'"
+            >
+              Low
+            </button>
+          </div>
+
+          <div class="flex gap-2 w-full sm:w-auto">
+            <div class="relative flex-1 sm:flex-initial">
+              <input
+                type="text"
+                placeholder="Filter incidents..."
+                class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <mat-icon class="absolute left-3 top-2.5 text-gray-400 text-lg">search</mat-icon>
+            </div>
+           <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openIncidentForm()">
+        <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+        New Incident
+      </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 font-medium">ID</th>
+                <th class="px-6 py-3 font-medium">Title</th>
+                <th class="px-6 py-3 font-medium">Priority</th>
+                <th class="px-6 py-3 font-medium">Assignee</th>
+                <th class="px-6 py-3 font-medium">Status</th>
+                <th class="px-6 py-3 font-medium">Updated</th>
+                <th class="px-6 py-3"></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" *ngIf="!isLoadingIncidents && incidents.length">
+              <tr class="hover:bg-gray-50" *ngFor="let incident of incidents; let i = index">
+                <td class="px-6 py-4 font-medium text-gray-900">
+                  INC-{{ i + 1 }}
+                </td>
+                <td class="px-6 py-4">
+                  <div>
+                    <button
+                      type="button"
+                      class="font-medium text-gray-900 cursor-pointer hover:underline"
+                      (click)="viewIncidentDetails(incident)"
+                    >
+                      {{ incident.title }}
+                    </button>
+                    <p class="text-xs text-gray-500">{{ incident.shortDescription }}</p>
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <span
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    [ngClass]="getPriorityClass(incident.priority)">
+                    {{ incident.priority }}
+                  </span>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="text-sm">
+                    {{ incident.assigneeId || 'Not assigned' }}
+                  </span>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    {{ incident.status }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-gray-500">
+                  {{ incident.project?.updatedDate | date:'short' }}
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <button mat-icon-button>
+                    <mat-icon class="text-gray-400">more_horiz</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+            <tbody *ngIf="!isLoadingIncidents && !incidents.length && !incidentsError">
+              <tr>
+                <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                  No incidents found for this project.
+                </td>
+              </tr>
+            </tbody>
+
+            <tbody *ngIf="isLoadingIncidents">
+              <tr>
+                <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                  Loading incidents...
+                </td>
+              </tr>
+            </tbody>
+
+            <tbody *ngIf="incidentsError">
+              <tr>
+                <td colspan="7" class="px-6 py-4 text-center text-sm text-red-600">
+                  {{ incidentsError }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-incident-form *ngIf="showIncidentForm" (closed)="onIncidentFormClosed($event)"></app-incident-form>
+</div>

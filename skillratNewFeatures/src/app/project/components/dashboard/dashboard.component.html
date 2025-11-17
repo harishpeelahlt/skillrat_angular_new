@@ -1,0 +1,159 @@
+<div class="bg-neutral-50 min-h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between px-8 py-4">
+    <div>
+      <h1 class="font-bold text-neutral-800" style="font-size: 25px;">Overview</h1>
+      <p class="text-sm text-neutral-600 mt-1">High level snapshot of projects, teams, and incidents.</p>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button class="flex items-center px-4 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
+        <mat-icon class="mr-2 text-neutral-500" style="font-size: 16px;">calendar_today</mat-icon>
+        This week
+      </button>
+      <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openProjectForm()">
+        <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+        New project
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 px-8 py-4">
+    <!-- SkillMind AI -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-neutral-200 hover:shadow-md transition-shadow duration-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-semibold text-neutral-500 uppercase tracking-wider">SkillMind</span>
+        <span class="flex items-center px-2 py-1 text-xs font-medium text-primary-700 bg-primary-100 rounded-full">
+          <mat-icon class="mr-1" style="font-size: 14px;">smart_toy</mat-icon>
+          AI assistant
+        </span>
+      </div>
+      <h3 class="text-3xl font-bold text-neutral-800 mb-1">Ask anything</h3>
+      <p class="text-xs text-neutral-600">Open a dedicated SkillMind window with a chat-style interface.</p>
+    </div>
+
+    <!-- Open Tasks -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-neutral-200 hover:shadow-md transition-shadow duration-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Open Tasks</span>
+        <span class="flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full whitespace-nowrap">
+          <mat-icon class="mr-1" style="font-size: 14px;">check_circle</mat-icon>
+          12 due today
+        </span>
+      </div>
+      <h3 class="text-3xl font-bold text-neutral-800 mb-1">48</h3>
+      <p class="text-xs text-neutral-600">Across projects and internal initiatives</p>
+    </div>
+
+    <!-- Avg. Resolution Time -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-neutral-200 hover:shadow-md transition-shadow duration-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Avg. Resolution Time</span>
+        <span class="flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
+          <mat-icon class="mr-1" style="font-size: 14px;">arrow_downward</mat-icon>
+          -18%
+        </span>
+      </div>
+      <h3 class="text-3xl font-bold text-neutral-800 mb-1">3.6h</h3>
+      <p class="text-xs text-neutral-600">Compared to 4.4h last week</p>
+    </div>
+
+    <!-- ITSM Incidents -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-neutral-200 hover:shadow-md transition-shadow duration-200 cursor-pointer" (click)="openIncidentsDashboard()">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-semibold text-neutral-500 uppercase tracking-wider">ITSM</span>
+        <button type="button" class="flex items-center px-3 py-1 text-xs font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors">
+          <mat-icon class="mr-1" style="font-size: 14px;">dashboard</mat-icon>
+          Open dashboard
+        </button>
+      </div>
+      <h3 class="text-2xl font-bold text-neutral-800 mb-1">Incidents</h3>
+      <p class="text-xs text-neutral-600">View dedicated ITSM dashboard with queues and SLAs.</p>
+    </div>
+  </div>
+
+  <!-- Projects Section -->
+  <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden px-8 py-4">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200">
+      <h2 class="text-lg font-semibold text-neutral-800">Projects</h2>
+      <div class="flex items-center space-x-4">
+        <a href="#" class="text-sm font-medium text-primary-600 hover:text-primary-700">View all</a>
+        <span class="text-sm font-medium text-neutral-500">Quick actions</span>
+      </div>
+    </div>
+
+    <!-- Table Header -->
+    <div class="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider bg-neutral-50">
+      <div class="col-span-4">Project</div>
+      <div class="col-span-2">Created By</div>
+      <div class="col-span-2">Status</div>
+      <div class="col-span-3">Dates</div>
+      <div class="col-span-1"></div>
+    </div>
+
+    <!-- Project Rows -->
+    <div class="divide-y divide-neutral-200" *ngIf="!isLoadingProjects && projects?.length; else projectState">
+      <div
+        class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors"
+        *ngFor="let project of projects"
+      >
+        <div class="col-span-4">
+          <p class="text-sm font-medium text-neutral-800">{{ project.name }}</p>
+          <p class="text-xs text-neutral-500 break-words">{{ project.description }}</p>
+        </div>
+
+        <div class="col-span-2 flex items-center">
+          <span class="text-xs font-medium text-primary-700 truncate">
+            {{ project.createdBy }}
+          </span>
+        </div>
+
+        <div class="col-span-2 flex items-center">
+          <span class="flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-700 rounded-full">
+            {{ project.status }}
+          </span>
+        </div>
+
+        <div class="col-span-3 flex flex-col justify-center text-xs text-neutral-700">
+          <span>Start: {{ project.startDate }}</span>
+          <span>End: {{ project.endDate }}</span>
+        </div>
+
+        <div class="col-span-1 flex justify-end">
+          <button mat-icon-button>
+            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #projectState>
+      <div class="px-6 py-6 text-sm text-neutral-500 flex items-center justify-center" *ngIf="isLoadingProjects">
+        Loading projects...
+      </div>
+      <div class="px-6 py-6 text-sm text-red-600" *ngIf="!isLoadingProjects && projectsError">
+        {{ projectsError }}
+      </div>
+      <div class="px-6 py-6 text-sm text-neutral-500" *ngIf="!isLoadingProjects && !projectsError && (!projects || !projects.length)">
+        No projects found.
+      </div>
+    </ng-template>
+
+    <!-- Quick Actions -->
+    <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
+      <button class="flex items-center justify-between w-full px-4 py-3 bg-white border border-neutral-300 rounded-lg hover:border-primary-300 hover:shadow-sm transition-all group">
+        <div class="flex items-center">
+          <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center mr-3 group-hover:bg-primary-200 transition-colors">
+            <mat-icon class="text-primary-600" style="font-size: 18px;">person_add</mat-icon>
+          </div>
+          <div class="text-left">
+            <p class="text-sm font-medium text-neutral-800">Invite teammate</p>
+            <p class="text-xs text-neutral-500">Add new collaborators quickly</p>
+          </div>
+        </div>
+        <mat-icon class="text-neutral-400 group-hover:text-neutral-600 transition-colors" style="font-size: 18px;">arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+  <app-project-form *ngIf="showProjectForm" (closed)="onProjectFormClosed($event)"></app-project-form>
+</div>

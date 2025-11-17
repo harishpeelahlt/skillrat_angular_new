@@ -1,0 +1,10 @@
+p {
+    margin: 0;
+}
+
+.active {
+    color: rgb(67 56 202 / var(--tw-text-opacity, 1));
+    mat-icon {
+        color: rgb(67 56 202 / var(--tw-text-opacity, 1));
+    }
+}

@@ -1,0 +1,106 @@
+<div class="bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6 px-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Employees</h1>
+      <p class="text-sm text-gray-600 mt-1">
+        Admin view of application employees and their contact details.
+      </p>
+    </div>
+    <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openEmployeeForm()">
+      <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+      Add Employee
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 px-8">
+    <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div class="relative flex-1 max-w-md">
+        <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</mat-icon>
+        <input
+          type="text"
+          placeholder="Search by name or email"
+          class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden px-8">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left">
+        <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 font-medium">Employee ID</th>
+            <th class="px-6 py-3 font-medium">Name</th>
+            <th class="px-6 py-3 font-medium">Email</th>
+            <th class="px-6 py-3 font-medium">Mobile</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200" *ngIf="!isLoadingEmployees && employees?.length; else employeesState">
+          <tr class="hover:bg-gray-50" *ngFor="let employee of employees; let i = index">
+            <td class="px-6 py-4 font-medium text-indigo-600">
+              EMP-{{ page * size + i + 1 }}
+            </td>
+            <td class="px-6 py-4 font-medium text-gray-900">
+              {{ employee.firstName }} {{ employee.lastName }}
+            </td>
+            <td class="px-6 py-4 text-gray-700">{{ employee.email }}</td>
+            <td class="px-6 py-4 text-gray-700">{{ employee.mobile }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #employeesState>
+      <div class="px-6 py-6 text-sm text-gray-500 flex items-center justify-center" *ngIf="isLoadingEmployees">
+        Loading employees...
+      </div>
+      <div class="px-6 py-6 text-sm text-red-600" *ngIf="!isLoadingEmployees && employeesError">
+        {{ employeesError }}
+      </div>
+      <div class="px-6 py-6 text-sm text-gray-500" *ngIf="!isLoadingEmployees && !employeesError && (!employees || !employees.length)">
+        No employees found.
+      </div>
+    </ng-template>
+
+    <!-- Pagination -->
+    <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50">
+      <p class="text-sm text-gray-600">
+        Page {{ (totalPages ? page + 1 : 0) }} of {{ totalPages || 0 }} · Total employees: {{ totalElements }}
+      </p>
+      <div class="flex items-center gap-2">
+        <button
+          mat-stroked-button
+          class="px-4 py-1.5 text-sm"
+          (click)="previousPage()"
+          [disabled]="page === 0 || totalPages <= 1 || isLoadingEmployees"
+        >
+          Prev
+        </button>
+        <button
+          mat-stroked-button
+          class="px-4 py-1.5 text-sm"
+          disabled
+        >
+          {{ totalPages ? (page + 1) : 0 }}
+        </button>
+        <button
+          mat-stroked-button
+          class="px-4 py-1.5 text-sm"
+          (click)="nextPage()"
+          [disabled]="page >= totalPages - 1 || totalPages <= 1 || isLoadingEmployees"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Employee Form Modal -->
+  <app-employee-form *ngIf="showEmployeeForm" (closed)="onEmployeeFormClosed($event)"></app-employee-form>
+</div>

@@ -1,0 +1,7 @@
+.cdk-overlay-backdrop {
+  backdrop-filter: blur(4px);
+}
+h2 ,h3{
+  margin: 0;
+  font-size: 1.5em;
+}

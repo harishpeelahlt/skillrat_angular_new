@@ -1,0 +1,103 @@
+<div class="bg-neutral-50 min-h-screen">
+  <div class="flex items-center justify-between px-8 py-4">
+    <div>
+      <h1 class="font-bold text-neutral-800" style="font-size: 25px;">Projects</h1>
+      <p class="text-sm text-neutral-600 mt-1">Manage all projects for your business unit.</p>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button class="button-class flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm" (click)="openProjectForm()">
+        <mat-icon class="mr-2" style="font-size: 16px;">add</mat-icon>
+        New project
+      </button>
+    </div>
+  </div>
+
+  <!-- Projects Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden mx-8 mb-8">
+    <div class="flex items-center justify-between px-6 py-2 border-b border-neutral-200">
+      <h2 class="text-lg font-semibold text-neutral-800" style="font-size: 1.5em; margin: 0;">Projects</h2>
+      <span class="text-sm text-neutral-500">Total: {{ totalElements }}</span>
+    </div>
+
+    <!-- Table Header -->
+    <div class="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider bg-neutral-50">
+      <div class="col-span-4">Project</div>
+      <div class="col-span-2">Created By</div>
+      <div class="col-span-2">Status</div>
+      <div class="col-span-2">Start Date</div>
+      <div class="col-span-1">End Date</div>
+    </div>
+
+    <!-- Project Rows -->
+    <div class="divide-y divide-neutral-200" *ngIf="!isLoadingProjects && projects?.length; else projectState">
+      <div
+        class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors"
+        *ngFor="let project of projects"
+      >
+        <div class="col-span-4">
+          <p class="text-sm font-medium text-neutral-800">{{ project.name }}</p>
+          <p class="text-xs text-neutral-500 break-words">{{ project.description }}</p>
+        </div>
+
+        <div class="col-span-2 flex items-center">
+          <span class="text-xs font-medium text-primary-700 truncate">
+            {{ project.createdBy }}
+          </span>
+        </div>
+
+        <div class="col-span-2 flex items-center">
+          <span class="flex items-center px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-700 rounded-full">
+            {{ project.status }}
+          </span>
+        </div>
+
+        <div class="col-span-2 flex flex-col justify-center text-xs text-neutral-700">
+          <span>Start: {{ project.startDate }}</span>
+        </div>
+
+         <div class="col-span-1 flex flex-col justify-center text-xs text-neutral-700 whitespace-nowrap">
+          <span>End: {{ project.endDate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #projectState>
+      <div class="px-6 py-6 text-sm text-neutral-500 flex items-center justify-center" *ngIf="isLoadingProjects">
+        Loading projects...
+      </div>
+      <div class="px-6 py-6 text-sm text-red-600" *ngIf="!isLoadingProjects && projectsError">
+        {{ projectsError }}
+      </div>
+      <div class="px-6 py-6 text-sm text-neutral-500" *ngIf="!isLoadingProjects && !projectsError && (!projects || !projects.length)">
+        No projects found.
+      </div>
+    </ng-template>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between px-6 py-4 border-t border-neutral-200 text-xs text-neutral-600">
+      <div>
+        Page {{ page + 1 }} of {{ totalPages || 1 }}
+      </div>
+      <div class="space-x-2">
+        <button
+          class="px-3 py-1 border border-neutral-300 rounded-lg text-xs font-medium hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          (click)="previousPage()"
+          [disabled]="page === 0 || totalPages <= 1 || isLoadingProjects"
+        >
+          Previous
+        </button>
+        <button
+          class="px-3 py-1 border border-neutral-300 rounded-lg text-xs font-medium hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          (click)="nextPage()"
+          [disabled]="page >= totalPages - 1 || totalPages <= 1 || isLoadingProjects"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Form Modal -->
+  <app-project-form *ngIf="showProjectForm" (closed)="onProjectFormClosed($event)"></app-project-form>
+</div>
+

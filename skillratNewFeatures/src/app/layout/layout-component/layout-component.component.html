@@ -1,0 +1,183 @@
+<div class="flex h-screen w-full overflow-hidden bg-neutral-50">
+    <!-- SIDENAV -->
+    <nav class="w-64 bg-white border-r border-neutral-200 flex flex-col">
+        <!-- Logo Header -->
+        <div class="flex items-center h-16 px-6 border-b border-neutral-200">
+            <mat-icon class="text-primary text-2xl">layers</mat-icon>
+            <span class="ml-3 text-lg font-bold text-neutral-800">ProjectFlow</span>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="flex-1 overflow-y-auto py-4 px-3">
+            <ul class="space-y-1">
+                <!-- Dashboard -->
+                <li>
+                    <a routerLink="/layout/dashboard"
+                        routerLinkActive="active flex items-center px-4 py-2.5 text-sm font-medium hover:bg-neutral-100 rounded-lg bg-primary-50 text-primary"
+                        class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+                        <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">home</mat-icon>
+                        Dashboard
+                    </a>
+                </li>
+
+                <!-- Company -->
+                <li>
+                    <a routerLink="/layout/dashboard/company" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+                        class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+                        <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">business</mat-icon>
+                        Company
+                    </a>
+                </li>
+
+                <!-- Projects -->
+                <li>
+                    <a routerLink="/layout/dashboard/projects" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+                        class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+                        <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">work</mat-icon>
+                        Projects
+                    </a>
+                </li>
+
+                <!-- Time & Attendance Dropdown -->
+                <li>
+                    <button (click)="toggleTA()"
+                        class="w-full group flex items-center justify-between px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+                        <div class="flex items-center">
+                            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">schedule</mat-icon>
+                            Time & Attendance
+                        </div>
+                        <mat-icon class="w-5 h-5 text-neutral-500 transition-transform duration-200"
+                            [class.rotate-180]="taOpen">expand_more</mat-icon>
+                    </button>
+
+                    <!-- Dropdown Items -->
+                    <ul *ngIf="taOpen"
+                        class="ml-8 mt-1 space-y-1 overflow-hidden transition-all duration-300 ease-in-out"
+                        [@dropdownAnimation]>
+                        <li>
+                            <a routerLink="/holiday-calendars" routerLinkActive="text-primary bg-primary-50"
+                                class="flex items-center px-3 py-1.5 text-sm text-neutral-600 rounded hover:bg-primary-50 hover:text-primary transition-colors">
+                                <mat-icon class="w-4 h-4 mr-3">calendar_today</mat-icon>
+                                Holiday Calendars
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/leave-policies" routerLinkActive="text-primary bg-primary-50"
+                                class="flex items-center px-3 py-1.5 text-sm text-neutral-600 rounded hover:bg-primary-50 hover:text-primary transition-colors">
+                                <mat-icon class="w-4 h-4 mr-3">description</mat-icon>
+                                Leave Policies
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/attendance-settings" routerLinkActive="text-primary bg-primary-50"
+                                class="flex items-center px-3 py-1.5 text-sm text-neutral-600 rounded hover:bg-primary-50 hover:text-primary transition-colors">
+                                <mat-icon class="w-4 h-4 mr-3">settings</mat-icon>
+                                Attendance Settings
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Users Dropdown -->
+                <li>
+                    <button (click)="toggleUsers()"
+                        class="w-full group flex items-center justify-between px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+                        <div class="flex items-center">
+                            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">group</mat-icon>
+                            Users
+                        </div>
+                        <mat-icon class="w-5 h-5 text-neutral-500 transition-transform duration-200"
+                            [class.rotate-180]="usersOpen">expand_more</mat-icon>
+                    </button>
+
+                    <!-- Dropdown Items -->
+                    <ul *ngIf="usersOpen"
+                        class="ml-8 mt-1 space-y-1 overflow-hidden transition-all duration-300 ease-in-out"
+                        [@dropdownAnimation]>
+                        <li>
+                            <a routerLink="/layout/users" routerLinkActive="text-primary bg-primary-50"
+                                class="flex items-center px-3 py-1.5 text-sm text-neutral-600 rounded hover:bg-primary-50 hover:text-primary transition-colors">
+                                <mat-icon class="w-4 h-4 mr-3">person</mat-icon>
+                                Users
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/layout/users/employees" routerLinkActive="text-primary bg-primary-50"
+                                class="flex items-center px-3 py-1.5 text-sm text-neutral-600 rounded hover:bg-primary-50 hover:text-primary transition-colors">
+                                <mat-icon class="w-4 h-4 mr-3">people</mat-icon>
+                                Employees
+                            </a>
+                        </li>
+                        <li>
+                            <a routerLink="/departments" routerLinkActive="text-primary bg-primary-50"
+                                class="flex items-center px-3 py-1.5 text-sm text-neutral-600 rounded hover:bg-primary-50 hover:text-primary transition-colors">
+                                <mat-icon class="w-4 h-4 mr-3">apartment</mat-icon>
+                                Departments
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Settings Footer -->
+        <div class="border-t border-neutral-200 p-3">
+            <a routerLink="/settings" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+                class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+                <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">settings</mat-icon>
+                Settings
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="flex-1 flex flex-col">
+        <!-- TOP NAV -->
+        <header class="flex items-center justify-between h-16 bg-white border-b border-neutral-200 px-8">
+            <!-- Search -->
+            <div class="flex items-center">
+                <div class="relative">
+                    <mat-icon
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-lg">search</mat-icon>
+                    <input type="text" placeholder="Search anything..."
+                        class="w-80 h-10 pl-10 pr-4 bg-neutral-100 border border-neutral-200 rounded-lg text-sm placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all" />
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center space-x-6">
+                <!-- All Projects Dropdown -->
+
+                <!-- Notifications -->
+                <button class="relative p-1 text-neutral-600 hover:text-primary transition-colors">
+                    <mat-icon class="text-xl">notifications</mat-icon>
+                    <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                </button>
+
+                <!-- User Profile -->
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg"
+                        alt="Elena Voyage"
+                        class="w-9 h-9 rounded-full object-cover ring-2 ring-transparent group-hover:ring-primary-200 transition-all" />
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-neutral-800">Elena Voyage</p>
+                        <p class="text-xs text-neutral-500">Administrator</p>
+                    </div>
+                    <mat-icon
+                        class="text-neutral-400 text-sm group-hover:text-neutral-600 transition-colors">expand_more</mat-icon>
+                </div>
+            </div>
+        </header>
+
+        <!-- Middle content goes here (not included as requested) -->
+        <div class="flex-1 overflow-hidden">
+            <div class="h-full overflow-y-auto">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

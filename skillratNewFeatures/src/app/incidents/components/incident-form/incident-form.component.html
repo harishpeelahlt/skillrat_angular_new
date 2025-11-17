@@ -1,0 +1,86 @@
+<div class="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm" @backdrop>
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-4 max-h-[85vh] flex flex-col"
+       @modal
+       [ngClass]="{ 'shake-modal': showShake }">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200 flex-none">
+      <div>
+        <h2 class="font-semibold text-neutral-800" style="font-size: 2em;">Create new incident</h2>
+      </div>
+      <button type="button" class="text-neutral-400 hover:text-neutral-600" (click)="close(false)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="px-6 pt-4 pb-6 space-y-6 overflow-y-auto flex-1">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Title</label>
+          <input formControlName="title" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('title')?.invalid && form.get('title')?.touched, 'border-neutral-300': !(form.get('title')?.invalid && form.get('title')?.touched) }" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-neutral-600 mb-1">Short description</label>
+        <textarea formControlName="shortDescription" rows="3"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('shortDescription')?.invalid && form.get('shortDescription')?.touched, 'border-neutral-300': !(form.get('shortDescription')?.invalid && form.get('shortDescription')?.touched) }"></textarea>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Urgency</label>
+          <select formControlName="urgency"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('urgency')?.invalid && form.get('urgency')?.touched, 'border-neutral-300': !(form.get('urgency')?.invalid && form.get('urgency')?.touched) }">
+            <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Impact</label>
+          <select formControlName="impact"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('impact')?.invalid && form.get('impact')?.touched, 'border-neutral-300': !(form.get('impact')?.invalid && form.get('impact')?.touched) }">
+            <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Category</label>
+          <select formControlName="category"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('category')?.invalid && form.get('category')?.touched, 'border-neutral-300': !(form.get('category')?.invalid && form.get('category')?.touched) }">
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Sub-category</label>
+          <select formControlName="subCategory"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('subCategory')?.invalid && form.get('subCategory')?.touched, 'border-neutral-300': !(form.get('subCategory')?.invalid && form.get('subCategory')?.touched) }">
+            <option *ngFor="let s of subCategoriesForSelectedCategory" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="text-xs text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+        {{ errorMessage }}
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-2 flex-none">
+        <button type="button" class="px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-800" (click)="close(false)">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center"
+                [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">Create incident</span>
+          <span *ngIf="isSubmitting">Saving...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+<div class="flex h-screen w-full overflow-hidden bg-neutral-50">
+  <!-- SIDENAV -->
+  <nav class="w-64 bg-white border-r border-neutral-200 flex flex-col">
+    <!-- Logo Header -->
+    <div class="flex items-center h-16 px-6 border-b border-neutral-200">
+      <mat-icon class="text-primary text-2xl">bug_report</mat-icon>
+      <span class="ml-3 text-lg font-bold text-neutral-800">Incidents</span>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="flex-1 overflow-y-auto py-4 px-3">
+      <ul class="space-y-1">
+        <li class="whitespace-nowrap">
+          <a routerLink="/incidents/dashboard"
+             routerLinkActive="active"
+             class="group whitespace-nowrap flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">dashboard</mat-icon>
+             Dashboard
+          </a>
+        </li>
+        <li>
+          <a routerLink="/incidents/incident" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+             class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">report</mat-icon>
+            Incident
+          </a>
+        </li>
+        <li>
+          <a routerLink="/incidents/add-incident" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+             class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">add_circle</mat-icon>
+            Add Incident
+          </a>
+        </li>
+        <li>
+          <a routerLink="/incidents/assigned-to-me" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+             class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">assignment_ind</mat-icon>
+            Assigned to Me
+          </a>
+        </li>
+        <li>
+          <a routerLink="/incidents/open" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+             class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">folder_open</mat-icon>
+            Open
+          </a>
+        </li>
+        <li>
+          <a routerLink="/incidents/all-incidents" routerLinkActive="bg-primary-50 text-primary border-r-2 border-primary"
+             class="group flex items-center px-3 py-2 text-sm font-medium text-neutral-700 rounded-md hover:bg-primary-50 hover:text-primary transition-all duration-200">
+            <mat-icon class="w-5 h-5 mr-3 text-neutral-600 group-hover:text-primary">list_alt</mat-icon>
+            All Incidents
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT WRAPPER -->
+  <div class="flex-1 flex flex-col">
+    <header class="flex items-center justify-between h-16 bg-white border-b border-neutral-200 px-8">
+            <!-- Search -->
+            <div class="flex items-center">
+                <div class="relative">
+                    <mat-icon
+                        class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-lg">search</mat-icon>
+                    <input type="text" placeholder="Search anything..."
+                        class="w-80 h-10 pl-10 pr-4 bg-neutral-100 border border-neutral-200 rounded-lg text-sm placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-all" />
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center space-x-6">
+                <!-- All Projects Dropdown -->
+                <button
+                    mat-button
+                    [matMenuTriggerFor]="projectsMenu"
+                    class="flex items-center text-sm font-medium text-neutral-700 hover:text-primary transition-colors">
+                    {{ selectedProjectName || 'All Projects' }}
+                    <mat-icon class="text-xs ml-1">expand_more</mat-icon>
+                </button>
+
+                <mat-menu #projectsMenu="matMenu">
+                  <ng-container *ngIf="isLoadingProjects">
+                    <button mat-menu-item disabled>
+                      <span>Loading projects...</span>
+                    </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="!isLoadingProjects && projects.length">
+                    <button
+                      mat-menu-item
+                      *ngFor="let project of projects"
+                      (click)="onSelectProject(project)">
+                      <span>{{ project.name }}</span>
+                    </button>
+
+                    <button
+                      mat-menu-item
+                      *ngIf="hasMoreProjects"
+                      (click)="onSeeMoreProjects()">
+                      <span>See more</span>
+                    </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="!isLoadingProjects && !projects.length && !projectsError">
+                    <button mat-menu-item disabled>
+                      <span>No projects found</span>
+                    </button>
+                  </ng-container>
+
+                  <ng-container *ngIf="projectsError">
+                    <button mat-menu-item disabled>
+                      <span>{{ projectsError }}</span>
+                    </button>
+                  </ng-container>
+                </mat-menu>
+
+                <!-- Notifications -->
+                <button class="relative p-1 text-neutral-600 hover:text-primary transition-colors">
+                    <mat-icon class="text-xl">notifications</mat-icon>
+                    <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                </button>
+
+                <!-- User Profile -->
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg"
+                        alt="Elena Voyage"
+                        class="w-9 h-9 rounded-full object-cover ring-2 ring-transparent group-hover:ring-primary-200 transition-all" />
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-neutral-800">Elena Voyage</p>
+                        <p class="text-xs text-neutral-500">Administrator</p>
+                    </div>
+                    <mat-icon
+                        class="text-neutral-400 text-sm group-hover:text-neutral-600 transition-colors">expand_more</mat-icon>
+                </div>
+            </div>
+        </header>
+
+    <div class="flex-1 overflow-hidden">
+      <div class="h-full overflow-y-auto">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

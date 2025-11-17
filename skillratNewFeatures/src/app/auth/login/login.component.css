@@ -1,0 +1,17 @@
+/* Default layout */
+.auth-container .left-panel {
+  transform: translateX(0);
+}
+
+.auth-container .right-panel {
+  transform: translateX(0);
+}
+
+/* When Register mode ON */
+.auth-container.register-mode .left-panel {
+  transform: translateX(100%); /* moves right */
+}
+
+.auth-container.register-mode .right-panel {
+  transform: translateX(-100%); /* moves left */
+}

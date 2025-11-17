@@ -1,0 +1,256 @@
+<div class="h-full bg-gray-50 flex" *ngIf="!isLoading && incident; else incidentState">
+  <!-- Left column: main content -->
+  <div class="flex-1 flex flex-col max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="px-6 pt-6 pb-4 border-b border-gray-200 bg-white shadow-sm">
+      <div class="flex items-start justify-between">
+        <div class="space-y-1">
+          <div class="flex items-center space-x-3 mb-1">
+            <span class="text-xs font-semibold tracking-wide text-gray-500">INCIDENT</span>
+            <span class="text-xs text-gray-400">•</span>
+            <span class="text-xs font-medium text-gray-500">{{ incident.incidentNumber }}</span>
+          </div>
+          <h1 class="text-2xl font-semibold text-gray-900 leading-tight">
+            {{ incident.title }}
+          </h1>
+          <div class="flex items-center text-xs text-gray-500 space-x-3 mt-1">
+            <div class="flex items-center space-x-1">
+              <mat-icon class="text-[16px] text-gray-400">work</mat-icon>
+              <span>{{ incident.project?.name }} ({{ incident.project?.code }})</span>
+            </div>
+            <span>•</span>
+            <div class="flex items-center space-x-1">
+              <mat-icon class="text-[16px] text-gray-400">person</mat-icon>
+              <span class="font-medium">Reporter:</span>
+              <span>{{ incident.reporterId || 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end space-y-3">
+          <!-- Status badge + dropdown -->
+          <div class="flex items-center space-x-2">
+            <span [ngClass]="getStatusBadgeClasses(status)" class="transition-colors">
+              <span class="w-1.5 h-1.5 rounded-full bg-current mr-2 opacity-70"></span>
+              {{ status }}
+            </span>
+            <select
+              class="ml-1 py-1 px-2 rounded-md text-xs font-medium border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              [(ngModel)]="status"
+              (ngModelChange)="onStatusChange($event)"
+              [disabled]="isUpdatingStatus"
+            >
+              <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+            </select>
+            <span *ngIf="isUpdatingStatus" class="text-[11px] text-gray-400 ml-1">Updating...</span>
+          </div>
+
+          <div class="flex items-center space-x-2 text-gray-500">
+            <button class="flex items-center px-2 py-1 text-xs font-medium rounded-md hover:bg-gray-100">
+              <mat-icon class="text-[18px] mr-1">share</mat-icon>
+              Share
+            </button>
+            <button class="flex items-center px-2 py-1 text-xs font-medium rounded-md hover:bg-gray-100">
+              <mat-icon class="text-[18px]">more_vert</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meta info strip -->
+      <div class="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
+        <div class="flex items-center space-x-2">
+          <mat-icon class="text-[16px] text-gray-400">schedule</mat-icon>
+          <span>Created:</span>
+          <span class="font-medium">{{ formatDate(incident.createdDate) }}</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <mat-icon class="text-[16px] text-gray-400">update</mat-icon>
+          <span>Updated:</span>
+          <span class="font-medium">{{ formatDate(incident.updatedDate) }}</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <mat-icon class="text-[16px] text-gray-400">event</mat-icon>
+          <span>Start:</span>
+          <span class="font-medium">{{ formatDate(incident.project?.startDate) }}</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <mat-icon class="text-[16px] text-gray-400">event_busy</mat-icon>
+          <span>End:</span>
+          <span class="font-medium">{{ formatDate(incident.project?.endDate) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="flex-1 flex overflow-y-auto px-6 py-4 space-x-6 bg-gray-50">
+      <!-- Left: description & activity -->
+      <div class="flex-1 space-y-6">
+        <!-- Description -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-sm font-semibold text-gray-800 flex items-center">
+              <mat-icon class="text-[18px] text-gray-500 mr-1.5">subject</mat-icon>
+              Description
+            </h2>
+          </div>
+          <div class="text-sm text-gray-700">
+            <p class="italic text-gray-400" *ngIf="!incident.shortDescription">Add description</p>
+            <p *ngIf="incident.shortDescription">{{ incident.shortDescription }}</p>
+          </div>
+        </section>
+
+        <!-- Classification -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <h2 class="text-sm font-semibold text-gray-800 mb-3 flex items-center">
+            <mat-icon class="text-[18px] text-gray-500 mr-1.5">category</mat-icon>
+            Classification
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="text-xs uppercase tracking-wide text-gray-400 mb-1">Category</div>
+              <div class="font-medium text-gray-800">{{ incident.category || '-' }}</div>
+            </div>
+            <div>
+              <div class="text-xs uppercase tracking-wide text-gray-400 mb-1">Subcategory</div>
+              <div class="font-medium text-gray-800">{{ incident.subCategory || '-' }}</div>
+            </div>
+            <div>
+              <div class="text-xs uppercase tracking-wide text-gray-400 mb-1">Urgency</div>
+              <div class="font-medium text-gray-800">{{ incident.urgency || '-' }}</div>
+            </div>
+            <div>
+              <div class="text-xs uppercase tracking-wide text-gray-400 mb-1">Impact</div>
+              <div class="font-medium text-gray-800">{{ incident.impact || '-' }}</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Activity / comments (static placeholder for now) -->
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-semibold text-gray-800 flex items-center">
+              <mat-icon class="text-[18px] text-gray-500 mr-1.5">forum</mat-icon>
+              Activity
+            </h2>
+          </div>
+          <div class="border border-gray-200 rounded-md p-2">
+            <textarea
+              rows="3"
+              class="w-full p-2 text-sm text-gray-700 resize-none focus:outline-none"
+              placeholder="Add a comment or update..."
+              [(ngModel)]="newCommentBody"
+              [disabled]="isPostingComment"
+            ></textarea>
+          </div>
+          <div class="mt-3 flex justify-end">
+            <button
+              class="px-4 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-md hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
+              (click)="addComment()"
+              [disabled]="isPostingComment || !newCommentBody.trim()">
+              {{ isPostingComment ? 'Posting...' : 'Add Comment' }}
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right: details panel -->
+      <aside class="w-80 flex-shrink-0 space-y-4">
+        <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-semibold text-gray-800 flex items-center">
+              <mat-icon class="text-[18px] text-gray-500 mr-1.5">info</mat-icon>
+              Details
+            </h3>
+          </div>
+
+          <div class="space-y-4 text-sm text-gray-700">
+            <!-- Assignee -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">Assignee</span>
+              <div class="ml-4 flex-1 flex justify-end items-center space-x-2">
+                <select
+                  class="max-w-full py-1 px-2 rounded-md text-xs font-medium border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  [(ngModel)]="selectedAssigneeId"
+                  (ngModelChange)="onAssigneeChange($event)"
+                  [disabled]="isUpdatingAssignee">
+                  <option value="">Not assigned</option>
+                  <option *ngFor="let emp of employees" [value]="emp.id">
+                    {{ emp.firstName }}
+                  </option>
+                </select>
+                <span *ngIf="isUpdatingAssignee" class="text-[11px] text-gray-400">Updating...</span>
+              </div>
+            </div>
+
+            <!-- Priority with colored badge + select -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">Priority</span>
+              <div class="flex items-center space-x-2 ml-4">
+                <span [ngClass]="getPriorityBadgeClasses(priority)" class="transition-colors">
+                  {{ priority }}
+                </span>
+                <select
+                  class="py-1 px-2 rounded-md text-xs font-medium border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
+                  [(ngModel)]="priority"
+                >
+                  <option *ngFor="let p of priorityOptions" [value]="p">{{ p }}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Reporter -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">Reporter</span>
+              <span class="font-medium truncate ml-4">
+                {{ reporterName }}
+              </span>
+            </div>
+
+            <!-- Created by -->
+            <div class="flex items-center justify-between">
+              <span class="text-gray-500">Created by</span>
+              <span class="font-medium truncate ml-4">
+                {{ incident.createdBy || 'N/A' }}
+              </span>
+            </div>
+          </div>
+        </section>
+                <section class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-semibold text-gray-800 flex items-center">
+              <mat-icon class="text-[18px] text-gray-500 mr-1.5">chat</mat-icon>
+              Comments
+            </h2>
+          </div>
+
+          <!-- Loading / error / empty states -->
+          <div *ngIf="isLoadingComments" class="text-xs text-gray-500">Loading comments...</div>
+          <div *ngIf="!isLoadingComments && commentsError" class="text-xs text-red-500">{{ commentsError }}</div>
+          <div *ngIf="!isLoadingComments && !commentsError && comments.length === 0" class="text-xs text-gray-400 italic">
+            No comments yet.
+          </div>
+
+          <!-- Comments list -->
+          <div *ngIf="!isLoadingComments && !commentsError && comments.length > 0"
+               class="mt-1 max-h-64 overflow-y-auto space-y-3 pr-1">
+            <div *ngFor="let c of comments" class="border border-gray-200 rounded-md p-3 text-sm bg-white">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-medium text-gray-800 text-xs">{{ c.createdBy || 'User' }}</span>
+                <!-- <span class="text-[11px] text-gray-400">{{ formatDate(c.createdDate) }}</span> -->
+              </div>
+              <p class="text-gray-700 leading-relaxed text-sm">{{ c.body }}</p>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<ng-template #incidentState>
+  <div class="h-full flex items-center justify-center bg-white">
+    <p class="text-sm text-gray-500" *ngIf="isLoading">Loading incident details...</p>
+    <p class="text-sm text-red-600" *ngIf="!isLoading && loadError">{{ loadError }}</p>
+  </div>
+</ng-template>

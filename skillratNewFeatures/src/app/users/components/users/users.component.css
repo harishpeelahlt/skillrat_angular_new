@@ -1,0 +1,28 @@
+h1 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.button-class {
+    background-color: blue;
+}
+
+h1 , p {
+    margin: 0;
+}
+
+h3 {
+    font-size: 1.7em;
+}
+
+mat-icon {
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-class {
+    background-color: blue;
+    color: white;
+}
