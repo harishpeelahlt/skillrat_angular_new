@@ -1,0 +1,86 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+     @backdrop
+     (click)="close()">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
+       @modal
+       [class.animate-shake]="showShake"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-8 py-5 border-b border-gray-200">
+      <h2 class="text-2xl font-bold text-gray-900">{{ modalTitle }}</h2>
+      <button (click)="close()" class="text-gray-400 hover:text-gray-600 transition">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Form Body -->
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
+          <input formControlName="firstName" type="text"
+                 class="w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
+                 [class.border-red-500]="form.get('firstName')?.invalid && form.get('firstName')?.touched"
+                 placeholder="John" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Last Name <span class="text-red-500">*</span></label>
+          <input formControlName="lastName" type="text"
+                 class="w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
+                 [class.border-red-500]="form.get('lastName')?.invalid && form.get('lastName')?.touched"
+                 placeholder="Doe" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+          <input formControlName="email" type="email"
+                 class="w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
+                 [class.border-red-500]="form.get('email')?.invalid && form.get('email')?.touched"
+                 placeholder="john@example.com" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mobile <span class="text-red-500">*</span></label>
+          <input formControlName="mobile" type="text"
+                 class="w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
+                 [class.border-red-500]="form.get('mobile')?.invalid && form.get('mobile')?.touched"
+                 placeholder="+91 98765 43210" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Role <span class="text-red-500">*</span></label>
+        <select formControlName="roleId"
+                class="w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition"
+                [class.border-red-500]="form.get('roleId')?.invalid && form.get('roleId')?.touched">
+          <option value="" disabled>Select a role</option>
+          <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+        </select>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage"
+           class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+        {{ errorMessage }}
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 px-8 py-5 border-t border-gray-200 bg-gray-50">
+      <button type="button" (click)="close()"
+              class="px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 rounded-xl transition">
+        Cancel
+      </button>
+      <button type="submit" (click)="submit()"
+              [disabled]="isSubmitting || form.invalid"
+              class="button-calss px-6 py-2.5 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-xl flex items-center gap-2 transition shadow-md">
+        <mat-icon *ngIf="isSubmitting" class="animate-spin text-lg">refresh</mat-icon>
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

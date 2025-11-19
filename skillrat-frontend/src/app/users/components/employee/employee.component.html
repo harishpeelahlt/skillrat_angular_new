@@ -39,6 +39,7 @@
             <th class="px-6 py-3 font-medium">Name</th>
             <th class="px-6 py-3 font-medium">Email</th>
             <th class="px-6 py-3 font-medium">Mobile</th>
+            <th class="px-6 py-3 font-medium text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200" *ngIf="!isLoadingEmployees && employees?.length; else employeesState">
@@ -51,6 +52,14 @@
             </td>
             <td class="px-6 py-4 text-gray-700">{{ employee.email }}</td>
             <td class="px-6 py-4 text-gray-700">{{ employee.mobile }}</td>
+             <td class="px-6 py-4 text-right whitespace-nowrap">
+              <button (click)="onEditEmployee(employee)" class="text-indigo-600 hover:text-indigo-900 mr-3" title="Edit">
+                <mat-icon class="material-icons-outlined" style="font-size: 20px;">edit</mat-icon>
+              </button>
+              <button (click)="onDeleteEmployee(employee)" class="text-red-600 hover:text-red-900" title="Delete">
+                <mat-icon class="material-icons-outlined" style="font-size: 20px;">delete</mat-icon>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -102,5 +111,9 @@
   </div>
 
   <!-- Employee Form Modal -->
-  <app-employee-form *ngIf="showEmployeeForm" (closed)="onEmployeeFormClosed($event)"></app-employee-form>
+  <app-employee-form
+   *ngIf="showEmployeeForm" 
+   (closed)="onEmployeeFormClosed($event)"
+   [employee]="selectedEmployeeForEdit"
+   ></app-employee-form>
 </div>

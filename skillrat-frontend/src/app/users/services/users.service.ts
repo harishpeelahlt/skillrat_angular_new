@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiConfigServiceService } from '../../core/services/api-config-service.service';
 
 export interface UserRoleDto {
   id: string;
@@ -28,15 +29,31 @@ export interface PageResponse<T> {
   empty: boolean;
 }
 
+export interface UserPayload {
+  b2bUnitId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  roleIds: string[];
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
   private readonly baseUrl = 'http://localhost:8081/api/admin/users';
+  private readonly apiConfig = inject(ApiConfigServiceService);
 
   constructor(private http: HttpClient) {}
 
-  getUsers(page: number, size: number, q?: string, role?: string): Observable<PageResponse<UserDto>> {
+  getUsers(
+    page: number,
+    size: number,
+    q?: string,
+    role?: string
+  ): Observable<PageResponse<UserDto>> {
+    const userDetailsUrl = this.apiConfig.getEndpoint('userEndPoints');
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -49,6 +66,21 @@ export class UsersService {
       params = params.set('role', role.trim());
     }
 
-    return this.http.get<PageResponse<UserDto>>(this.baseUrl, { params });
+    return this.http.get<PageResponse<UserDto>>(`${userDetailsUrl}/admin/users`, { params });
+  }
+
+  getAllRoles(): Observable<any> {
+    const userDetailsUrl = this.apiConfig.getEndpoint('userEndPoints');
+    return this.http.get<any>(`${userDetailsUrl}/roles/all`);
+  }
+
+  createUser(payload: UserPayload): Observable<any> {
+    const userDetailsUrl = this.apiConfig.getEndpoint('userEndPoints');
+    return this.http.post(`${userDetailsUrl}/admin/users`, payload);
+  }
+
+  updateUser(userId: string, payload: UserPayload): Observable<any> {
+    const userDetailsUrl = this.apiConfig.getEndpoint('userEndPoints');
+    return this.http.put(`${userDetailsUrl}/admin/users/${userId}`, payload);
   }
 }

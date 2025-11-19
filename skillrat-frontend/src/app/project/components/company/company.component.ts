@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { CompanyService } from '../../services/company.service';
+import { CompanyResponse } from '../../Models/company-interface';
 
 @Component({
     selector: 'app-company',
@@ -6,9 +8,25 @@ import { Component } from '@angular/core';
     styleUrl: './company.component.css',
     standalone: false
 })
-export class CompanyComponent {
+export class CompanyComponent implements OnInit {
   showCompanyForm = false;
+  companiesResponse : CompanyResponse | null = null;
+  private readonly companyService = inject(CompanyService);
 
+  ngOnInit(): void {
+    this.getAllCompanies();
+  }
+  
+  getAllCompanies(): void {
+    this.companyService.getAllCompanies().subscribe({
+      next: (response: CompanyResponse) => {
+        this.companiesResponse = response;
+      },
+      error: (err) => {
+        console.error('Failed to load company', err);
+      }
+    });
+  }
   openCompanyForm(): void {
     this.showCompanyForm = true;
   }
@@ -16,7 +34,6 @@ export class CompanyComponent {
   onCompanyFormClosed(success: boolean): void {
     this.showCompanyForm = false;
     if (success) {
-      // Optionally refresh company list here later
     }
   }
 }

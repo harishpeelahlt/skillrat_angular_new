@@ -37,7 +37,8 @@
           class="w-full text-white py-2 rounded-lg mb-3"
           type="submit"
           [disabled]="isSubmittingLogin">
-          Login
+         <span *ngIf="!loginLoading">Login</span>
+         <span *ngIf="loginLoading">Loading...</span>
         </button>
 
         <div class="text-center">
@@ -84,7 +85,8 @@
           class="w-full text-white py-2 rounded-lg mb-3"
           type="submit"
           [disabled]="isSubmittingRegister">
-          Register
+         <span *ngIf="!loginLoading">Register</span>
+         <span *ngIf="loginLoading">Loading...</span>
         </button>
 
         <div class="text-center">

@@ -30,7 +30,7 @@
     <!-- Table Header -->
     <div class="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wider bg-neutral-50">
       <div class="col-span-4">Company</div>
-      <div class="col-span-3">Industry</div>
+      <div class="col-span-3">Email</div>
       <div class="col-span-2">Location</div>
       <div class="col-span-2">Status</div>
       <div class="col-span-1"></div>
@@ -41,75 +41,20 @@
       <!-- Row 1 -->
       <div class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors">
         <div class="col-span-4">
-          <p class="text-sm font-medium text-neutral-800">Acme Corp</p>
-          <p class="text-xs text-neutral-500">Enterprise software solutions</p>
+          <p class="text-sm font-medium text-neutral-800">{{companiesResponse?.business?.name}}</p>
+          <p class="text-xs text-neutral-500">{{companiesResponse?.business?.website}}</p>
         </div>
         <div class="col-span-3 flex items-center">
-          <span class="text-xs font-medium text-neutral-700">Technology</span>
+          <span class="text-xs font-medium text-neutral-700">{{companiesResponse?.business?.contactEmail}}</span>
         </div>
         <div class="col-span-2 flex items-center">
-          <span class="text-xs font-medium text-neutral-700">San Francisco, CA</span>
+          <span class="text-xs font-medium text-neutral-700">{{companiesResponse?.business?.address?.city}}, {{companiesResponse?.business?.address?.state}} {{companiesResponse?.business?.address?.postalCode || ''}}</span>
         </div>
         <div class="col-span-2 flex items-center">
           <span class="flex items-center px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
             <span class="w-1.5 h-1.5 rounded-full bg-green-600 mr-1"></span>
-            Active
+            {{ companiesResponse?.business?.status || '' }}
           </span>
-        </div>
-        <div class="col-span-1 flex justify-end">
-          <button mat-icon-button>
-            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <!-- Row 2 -->
-      <div class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors">
-        <div class="col-span-4">
-          <p class="text-sm font-medium text-neutral-800">Global Retail Inc.</p>
-          <p class="text-xs text-neutral-500">Multi-channel retail operations</p>
-        </div>
-        <div class="col-span-3 flex items-center">
-          <span class="text-xs font-medium text-neutral-700">Retail</span>
-        </div>
-        <div class="col-span-2 flex items-center">
-          <span class="text-xs font-medium text-neutral-700">London, UK</span>
-        </div>
-        <div class="col-span-2 flex items-center">
-          <span class="flex items-center px-2 py-1 text-xs font-medium text-orange-700 bg-orange-100 rounded-full">
-            <span class="w-1.5 h-1.5 rounded-full bg-orange-600 mr-1"></span>
-            Onboarding
-          </span>
-        </div>
-        <div class="col-span-1 flex justify-end">
-          <button mat-icon-button>
-            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <!-- Row 3 -->
-      <div class="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-neutral-50 transition-colors">
-        <div class="col-span-4">
-          <p class="text-sm font-medium text-neutral-800">HealthPlus</p>
-          <p class="text-xs text-neutral-500">Healthcare and wellness services</p>
-        </div>
-        <div class="col-span-3 flex items-center">
-          <span class="text-xs font-medium text-neutral-700">Healthcare</span>
-        </div>
-        <div class="col-span-2 flex items-center">
-          <span class="text-xs font-medium text-neutral-700">Bangalore, IN</span>
-        </div>
-        <div class="col-span-2 flex items-center">
-          <span class="flex items-center px-2 py-1 text-xs font-medium text-neutral-700 bg-neutral-200 rounded-full">
-            <span class="w-1.5 h-1.5 rounded-full bg-neutral-500 mr-1"></span>
-            Inactive
-          </span>
-        </div>
-        <div class="col-span-1 flex justify-end">
-          <button mat-icon-button>
-            <mat-icon class="text-neutral-400" style="font-size: 18px;">more_horiz</mat-icon>
-          </button>
         </div>
       </div>
     </div>

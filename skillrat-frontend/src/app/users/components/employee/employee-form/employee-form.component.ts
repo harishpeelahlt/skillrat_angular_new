@@ -1,10 +1,10 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { AuthserviceService } from '../../../auth/authservice/authservice.service';
-import { CurrentUserResponse } from '../../../auth/Models/auth.interfaces';
+import { AuthserviceService } from '../../../../auth/authservice/authservice.service';
+import { CurrentUserResponse } from '../../../../auth/Models/auth.interfaces';
 
 interface RoleResponse {
   id: string;
@@ -52,6 +52,7 @@ interface CreateEmployeePayload {
 })
 export class EmployeeFormComponent implements OnInit, OnDestroy {
   @Output() closed = new EventEmitter<boolean>();
+  @Input() employee: any;
 
   form: FormGroup;
   isSubmitting = false;
@@ -63,6 +64,14 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
 
   private currentUser: CurrentUserResponse | null = null;
   private subscription?: Subscription;
+
+   get isEditMode(): boolean {
+    return !!this.employee;
+  }
+
+  get modalTitle(): string {
+    return this.isEditMode ? 'Edit Employee' : 'New Employee';
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -93,6 +102,32 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe();
   }
 
+   ngOnChanges(changes: SimpleChanges): void {
+      if (changes['employee']) {
+        if (this.employee) {
+          this.populateForm();
+        } else {
+          this.form.reset();
+        }
+      }
+    }
+
+    private populateForm(): void {
+    if (!this.employee) return;
+
+    this.form.patchValue({
+      firstName: this.employee.firstName || '',
+      lastName: this.employee.lastName || '',
+      email: this.employee.email || '',
+      mobile: this.employee.mobile || '',
+      designation: this.employee.designation || '',
+      department: this.employee.department || '',
+      employmentType: this.employee.employmentType || 'FULL_TIME',
+      hireDate: this.employee.hireDate ? this.employee.hireDate.split('T')[0] : '',
+      roleId: this.employee.roles && this.employee.roles.length > 0 ? this.employee.roles[0].id : ''
+    });
+  }
+
   close(success: boolean = false): void {
     this.closed.emit(success);
   }
@@ -121,7 +156,9 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     if (this.form.invalid || !this.currentUser?.b2bUnitId) {
       this.form.markAllAsTouched();
       if (!this.currentUser?.b2bUnitId) {
-        this.errorMessage = 'User context is missing. Please re-login.';
+        this.errorMessage = !this.currentUser?.b2bUnitId
+        ? 'User context is missing. Please re-login.'
+        : 'Please fill all required fields correctly.';
       }
       this.triggerShake();
       return;
@@ -133,18 +170,25 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     const value = this.form.value;
     const payload: CreateEmployeePayload = {
       b2bUnitId: this.currentUser.b2bUnitId,
-      firstName: value.firstName,
-      lastName: value.lastName,
-      email: value.email,
-      mobile: value.mobile,
-      designation: value.designation,
-      department: value.department,
+      firstName: value.firstName.trim(),
+      lastName: value.lastName.trim(),
+      email: value.email.trim(),
+      mobile: value.mobile.trim(),
+      designation: value.designation.trim(),
+      department: value.department.trim(),
       employmentType: value.employmentType,
       hireDate: value.hireDate,
       roleIds: [value.roleId]
     };
+    const employeeId = this.employee?.id;
+    const url = employeeId
+      ? `http://localhost:8081/api/admin/employees/${employeeId}`
+      : 'http://localhost:8081/api/admin/employees';
 
-    this.http.post('http://localhost:8081/api/admin/employees', payload).subscribe({
+      const httpCall = employeeId
+      ? this.http.put(url, payload)
+      : this.http.post(url, payload);
+    httpCall.subscribe({
       next: () => {
         this.isSubmitting = false;
         this.close(true);

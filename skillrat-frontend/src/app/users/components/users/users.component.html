@@ -55,20 +55,31 @@
             <th class="px-6 py-3 font-medium">Name</th>
             <th class="px-6 py-3 font-medium">Role</th>
             <th class="px-6 py-3 font-medium">Email</th>
+            <th class="px-6 py-3 font-medium text-right">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200" *ngIf="!isLoadingUsers && users?.length; else usersState">
           <tr class="hover:bg-gray-50" *ngFor="let user of users; let i = index">
-            <td class="px-6 py-4 font-medium text-indigo-600">
+            <td class="px-6 py-4 font-medium text-indigo-600 whitespace-nowrap">
               USER-{{ page * size + i + 1 }}
             </td>
             <td class="px-6 py-4 font-medium text-gray-900">
               {{ user.firstName }} {{ user.lastName }}
             </td>
-            <td class="px-6 py-4 text-gray-700">
-              {{ getUserRoles(user) }}
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                {{ getUserRoles(user) }}
+              </span>
             </td>
             <td class="px-6 py-4 text-gray-700">{{ user.email }}</td>
+            <td class="px-6 py-4 text-right whitespace-nowrap">
+              <button (click)="onEditUser(user)" class="text-indigo-600 hover:text-indigo-900 mr-3" title="Edit">
+                <mat-icon class="material-icons-outlined" style="font-size: 20px;">edit</mat-icon>
+              </button>
+              <button (click)="onDeleteUser(user)" class="text-red-600 hover:text-red-900" title="Delete">
+                <mat-icon class="material-icons-outlined" style="font-size: 20px;">delete</mat-icon>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -120,5 +131,8 @@
   </div>
 
   <!-- Users Form Modal -->
-  <app-users-form *ngIf="showUserForm" (closed)="onUserFormClosed($event)"></app-users-form>
+  <app-users-form *ngIf="showUserForm"
+   (closed)="onUserFormClosed($event)"
+   [user]="selectedUserForEdit"
+   ></app-users-form>
 </div>

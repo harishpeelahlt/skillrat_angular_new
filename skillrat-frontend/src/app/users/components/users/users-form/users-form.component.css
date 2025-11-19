@@ -8,3 +8,12 @@
   50% { transform: translateX(4px); }
   75% { transform: translateX(-4px); }
 }
+
+h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+.button-calss {
+  background-color: #3b82f6; /* Primary color */
+  color: white;
+}
