@@ -1,0 +1,9 @@
+{
+  "baseUrl": "https://skillrat.com",
+  "endpoints": {
+    "authEndPoints"       : "/auth-service/oauth2",
+    "userEndPoints"       : "/user-service/api",
+    "projectsEndPoint"    : "/project-service/api",
+    "organizationEndPoint": "/organisation-service/api"
+  }
+}

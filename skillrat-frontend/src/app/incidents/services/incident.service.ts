@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PageResponse } from '../../project/services/project.service';
+import { ApiConfigServiceService } from '../../core/services/api-config-service.service';
 
 export interface IncidentProject {
   id: string;
@@ -65,13 +66,15 @@ export interface IncidentCreatePayload {
 
 @Injectable({ providedIn: 'root' })
 export class IncidentService {
-  private readonly baseUrl = 'http://localhost:8087/api/projects';
-  private readonly incidentDetailsBaseUrl = 'http://localhost:8087/api/incidents';
+  // private readonly baseUrl = 'http://localhost:8087/api/projects';
+  // private readonly incidentDetailsBaseUrl = 'http://localhost:8087/api/incidents';
+  private readonly apiConfig = inject(ApiConfigServiceService);
 
   constructor(private http: HttpClient) {}
 
   getIncidentsByProject(projectId: string, page = 0, size = 20): Observable<PageResponse<Incident>> {
-    const url = `${this.baseUrl}/${projectId}/incidents`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/projects/${projectId}/incidents`;
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
@@ -80,32 +83,38 @@ export class IncidentService {
   }
 
   createIncident(projectId: string, payload: IncidentCreatePayload): Observable<Incident> {
-    const url = `${this.baseUrl}/${projectId}/incidents`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/projects/${projectId}/incidents`;
     return this.http.post<Incident>(url, payload);
   }
 
   getIncidentById(id: string): Observable<Incident> {
-    const url = `${this.incidentDetailsBaseUrl}/${id}`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/incidents/${id}`;
     return this.http.get<Incident>(url);
   }
 
   updateIncidentStatus(id: string, status: string): Observable<Incident> {
-    const url = `${this.incidentDetailsBaseUrl}/${id}/status`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/incidents/${id}/status`;
     return this.http.put<Incident>(url, { status });
   }
 
   updateIncidentReporter(id: string, userId: string): Observable<Incident> {
-    const url = `${this.incidentDetailsBaseUrl}/${id}/reporter`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/incidents/${id}/reporter`;
     return this.http.put<Incident>(url, { userId });
   }
 
   getIncidentComments(id: string): Observable<PageResponse<IncidentComment>> {
-    const url = `${this.incidentDetailsBaseUrl}/${id}/comments`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/incidents/${id}/comments`;
     return this.http.get<PageResponse<IncidentComment>>(url);
   }
 
   postIncidentComment(id: string, body: string): Observable<IncidentComment> {
-    const url = `${this.incidentDetailsBaseUrl}/${id}/comments`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/incidents/${id}/comments`;
     return this.http.post<IncidentComment>(url, { body });
   }
 }

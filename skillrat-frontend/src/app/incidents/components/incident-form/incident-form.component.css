@@ -10,3 +10,8 @@
   80% { transform: translateX(4px); }
   100% { transform: translateX(0); }
 }
+
+.button-class {
+  background-color: blue;
+  color: white;
+}

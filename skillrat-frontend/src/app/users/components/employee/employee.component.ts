@@ -10,6 +10,7 @@ export class EmployeeComponent implements OnInit {
   employees: EmployeeDto[] = [];
   isLoadingEmployees = false;
   employeesError: string | null = null;
+   selectedEmployeeForEdit: any;
 
   page = 0;
   size = 10;
@@ -27,11 +28,13 @@ export class EmployeeComponent implements OnInit {
   }
 
   openEmployeeForm(): void {
+    this.selectedEmployeeForEdit = null;
     this.showEmployeeForm = true;
   }
 
   onEmployeeFormClosed(success: boolean): void {
     this.showEmployeeForm = false;
+     this.selectedEmployeeForEdit = null;
     if (success) {
       this.page = 0;
       this.loadEmployees();
@@ -78,4 +81,11 @@ export class EmployeeComponent implements OnInit {
       }
     });
   }
+
+   onEditEmployee(employee: any): void {
+    debugger
+      this.selectedEmployeeForEdit = employee;     // Pass the employee to edit
+      this.showEmployeeForm = true;
+    }
+    onDeleteEmployee(employee: any): void {}
 }

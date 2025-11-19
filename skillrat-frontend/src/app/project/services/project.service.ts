@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiConfigServiceService } from '../../core/services/api-config-service.service';
 
 export interface ProjectClientPayload {
   name: string;
@@ -60,14 +61,18 @@ export interface PageResponse<T> {
 export class ProjectService {
   private readonly baseUrl = 'http://localhost:8087/api/projects';
 
+  apiConfig = inject(ApiConfigServiceService);
+
   constructor(private http: HttpClient) {}
 
   createProject(payload: ProjectCreatePayload): Observable<any> {
-    return this.http.post<any>(this.baseUrl, payload);
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    return this.http.post<any>(`${projectsEndPointUrl}/projects`, payload);
   }
 
   getProjectsByB2BUnit(b2bUnitId: string, page = 0, size = 20): Observable<PageResponse<Project>> {
-    const url = `${this.baseUrl}/byB2BUnit/${b2bUnitId}`;
+    const projectsEndPointUrl = this.apiConfig.getEndpoint('projectsEndPoint');
+    const url = `${projectsEndPointUrl}/projects/byB2BUnit/${b2bUnitId}`;
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());

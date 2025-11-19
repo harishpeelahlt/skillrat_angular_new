@@ -4,9 +4,9 @@
        [ngClass]="{ 'shake-modal': showShake }">
     <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200 flex-none">
       <div>
-        <h2 class="font-semibold text-neutral-800" style="font-size: 2em;">Create new user</h2>
+        <h2 class="font-semibold text-neutral-800" style="font-size: 2em;">{{ modalTitle }}</h2>
       </div>
-      <button type="button" class="text-neutral-400 hover:text-neutral-600" (click)="close(false)">
+      <button type="button" class="text-neutral-400 hover:text-neutral-600" (click)="close()">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -42,6 +42,38 @@
         </div>
       </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Designation</label>
+          <input formControlName="designation" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('designation')?.invalid && form.get('designation')?.touched, 'border-neutral-300': !(form.get('designation')?.invalid && form.get('designation')?.touched) }" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Department</label>
+          <input formControlName="department" type="text"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('department')?.invalid && form.get('department')?.touched, 'border-neutral-300': !(form.get('department')?.invalid && form.get('department')?.touched) }" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Employment type</label>
+          <select formControlName="employmentType"
+                  class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  [ngClass]="{ 'border-red-500': form.get('employmentType')?.invalid && form.get('employmentType')?.touched, 'border-neutral-300': !(form.get('employmentType')?.invalid && form.get('employmentType')?.touched) }">
+            <option *ngFor="let type of employmentTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-neutral-600 mb-1">Hire date</label>
+          <input formControlName="hireDate" type="date"
+                 class="w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                 [ngClass]="{ 'border-red-500': form.get('hireDate')?.invalid && form.get('hireDate')?.touched, 'border-neutral-300': !(form.get('hireDate')?.invalid && form.get('hireDate')?.touched) }" />
+        </div>
+      </div>
+
       <div>
         <label class="block text-xs font-medium text-neutral-600 mb-1">Role</label>
         <select formControlName="roleId"
@@ -57,13 +89,13 @@
       </div>
 
       <div class="flex justify-end space-x-3 pt-2 flex-none">
-        <button type="button" class="px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-800" (click)="close(false)">
+        <button type="button" class="px-4 py-2 text-sm font-medium text-neutral-600 hover:text-neutral-800" (click)="close()">
           Cancel
         </button>
         <button type="submit"
-                class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center"
+                class="button-class px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed flex items-center"
                 [disabled]="isSubmitting">
-          <span *ngIf="!isSubmitting">Create user</span>
+          <span *ngIf="!isSubmitting">Save employee</span>
           <span *ngIf="isSubmitting">Saving...</span>
         </button>
       </div>

@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AuthserviceService } from '../../../auth/authservice/authservice.service';
 import { CurrentUserResponse } from '../../../auth/Models/auth.interfaces';
 import { Project, ProjectService } from '../../services/project.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +22,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthserviceService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private MatSnackBar : MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +67,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openIncidentsDashboard(): void {
-    window.open('/incidents', '_blank');
+    if(this.projects.length > 0) {
+      window.open('/incidents', '_blank');
+    }
+    else {
+      this.MatSnackBar.open('No projects found', 'Close', {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center'
+      });
+    }
+    
   }
 }
