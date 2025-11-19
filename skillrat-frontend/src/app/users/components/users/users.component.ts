@@ -12,9 +12,10 @@ interface RoleResponse {
 }
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.css',
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrl: './users.component.css',
+    standalone: false
 })
 export class UsersComponent implements OnInit {
   roles: any;

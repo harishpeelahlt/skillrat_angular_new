@@ -6,9 +6,10 @@ import { IncidentsContextService } from '../../services/incidents-context.servic
 import { Project } from '../../../project/services/project.service';
 
 @Component({
-  selector: 'app-incident-dashboard',
-  templateUrl: './incident-dashboard.component.html',
-  styleUrl: './incident-dashboard.component.css'
+    selector: 'app-incident-dashboard',
+    templateUrl: './incident-dashboard.component.html',
+    styleUrl: './incident-dashboard.component.css',
+    standalone: false
 })
 export class IncidentDashboardComponent implements OnInit, OnDestroy {
   selectedPriority: 'all' | 'critical' | 'high' | 'medium' | 'low' = 'all';

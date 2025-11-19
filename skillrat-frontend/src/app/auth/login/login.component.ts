@@ -6,9 +6,10 @@ import { LoginPayload, RegisterPayload } from '../Models/auth.interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: false
 })
 export class LoginComponent {
   showRegister = false;

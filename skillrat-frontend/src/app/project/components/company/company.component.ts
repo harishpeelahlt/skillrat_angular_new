@@ -3,9 +3,10 @@ import { CompanyService } from '../../services/company.service';
 import { CompanyResponse } from '../../Models/company-interface';
 
 @Component({
-  selector: 'app-company',
-  templateUrl: './company.component.html',
-  styleUrl: './company.component.css'
+    selector: 'app-company',
+    templateUrl: './company.component.html',
+    styleUrl: './company.component.css',
+    standalone: false
 })
 export class CompanyComponent implements OnInit {
   showCompanyForm = false;

@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { AuthserviceService } from './auth/authservice/authservice.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    standalone: false
 })
 export class AppComponent implements OnInit {
   title = 'ng18-ngmodel-app';

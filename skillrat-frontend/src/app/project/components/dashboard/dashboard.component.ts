@@ -6,9 +6,10 @@ import { Project, ProjectService } from '../../services/project.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.css',
+    standalone: false
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   showProjectForm = false;

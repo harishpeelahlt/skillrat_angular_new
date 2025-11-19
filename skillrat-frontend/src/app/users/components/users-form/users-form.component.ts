@@ -2,14 +2,28 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
-import { AuthserviceService } from '../../../../auth/authservice/authservice.service';
-import { CurrentUserResponse } from '../../../../auth/Models/auth.interfaces';
-import { ProjectCreatePayload, ProjectService } from '../../../services/project.service';
+import { HttpClient } from '@angular/common/http';
+import { AuthserviceService } from '../../../auth/authservice/authservice.service';
+import { CurrentUserResponse } from '../../../auth/Models/auth.interfaces';
+
+interface RoleResponse {
+  id: string;
+  name: string;
+}
+
+interface CreateUserPayload {
+  b2bUnitId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  roleIds: string[];
+}
 
 @Component({
-    selector: 'app-project-form',
-    templateUrl: './project-form.component.html',
-    styleUrl: './project-form.component.css',
+    selector: 'app-users-form',
+    templateUrl: './users-form.component.html',
+    styleUrl: './users-form.component.css',
     animations: [
         trigger('backdrop', [
             transition(':enter', [
@@ -32,32 +46,29 @@ import { ProjectCreatePayload, ProjectService } from '../../../services/project.
     ],
     standalone: false
 })
-export class ProjectFormComponent implements OnInit, OnDestroy {
+export class UsersFormComponent implements OnInit, OnDestroy {
   @Output() closed = new EventEmitter<boolean>();
 
   form: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
+  showShake = false;
+
+  roles: { id: string; name: string }[] = [];
   private currentUser: CurrentUserResponse | null = null;
   private subscription?: Subscription;
-  showShake = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthserviceService,
-    private projectService: ProjectService
+    private http: HttpClient
   ) {
     this.form = this.fb.group({
-      name: ['', [Validators.required]],
-      code: ['', [Validators.required]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]],
-      description: ['', [Validators.required]],
-      client: this.fb.group({
-        name: ['', [Validators.required]],
-        primaryContactEmail: ['', [Validators.required, Validators.email]],
-        secondaryContactEmail: ['', [Validators.email]]
-      })
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      mobile: ['', [Validators.required]],
+      roleId: ['', [Validators.required]]
     });
   }
 
@@ -65,6 +76,7 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
     this.subscription = this.authService.currentUser$.subscribe((user: CurrentUserResponse | null) => {
       this.currentUser = user;
     });
+    this.loadRoles();
   }
 
   ngOnDestroy(): void {
@@ -75,10 +87,30 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
     this.closed.emit(success);
   }
 
+  private loadRoles(): void {
+    this.http
+      .get<RoleResponse[]>('http://localhost:8081/api/roles/all')
+      .subscribe({
+        next: (data) => {
+          const map = new Map<string, string>();
+          (data || []).forEach((r) => {
+            if (r.name && r.id && !map.has(r.name)) {
+              map.set(r.name, r.id);
+            }
+          });
+          this.roles = Array.from(map.entries()).map(([name, id]) => ({ id, name }));
+        },
+        error: (err) => {
+          console.error('Failed to load roles for user form', err);
+          this.roles = [];
+        }
+      });
+  }
+
   submit(): void {
-    if (this.form.invalid || !this.currentUser) {
+    if (this.form.invalid || !this.currentUser?.b2bUnitId) {
       this.form.markAllAsTouched();
-      if (!this.currentUser) {
+      if (!this.currentUser?.b2bUnitId) {
         this.errorMessage = 'User context is missing. Please re-login.';
       }
       this.triggerShake();
@@ -89,33 +121,28 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
 
     const value = this.form.value;
-    const payload: ProjectCreatePayload = {
-      name: value.name,
-      code: value.code,
+    const payload: CreateUserPayload = {
       b2bUnitId: this.currentUser.b2bUnitId,
-      startDate: value.startDate,
-      endDate: value.endDate,
-      description: value.description,
-      client: {
-        name: value.client.name,
-        primaryContactEmail: value.client.primaryContactEmail,
-        secondaryContactEmail: value.client.secondaryContactEmail
-      }
+      firstName: value.firstName,
+      lastName: value.lastName,
+      email: value.email,
+      mobile: value.mobile,
+      roleIds: [value.roleId]
     };
 
-    this.projectService.createProject(payload).subscribe({
+    this.http.post('http://localhost:8081/api/admin/users', payload).subscribe({
       next: () => {
         this.isSubmitting = false;
         this.close(true);
       },
       error: (error: any) => {
         this.isSubmitting = false;
-        this.errorMessage = error?.error?.message || 'Failed to create project. Please try again.';
+        this.errorMessage = error?.error?.message || 'Failed to create user. Please try again.';
         this.triggerShake();
       }
     });
   }
- 
+
   private triggerShake(): void {
     this.showShake = false;
     setTimeout(() => {
