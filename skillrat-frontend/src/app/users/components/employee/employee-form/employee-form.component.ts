@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { AuthserviceService } from '../../../../auth/authservice/authservice.service';
 import { CurrentUserResponse } from '../../../../auth/Models/auth.interfaces';
+import { UsersService } from '../../../services/users.service';
 
 interface RoleResponse {
   id: string;
@@ -75,7 +76,8 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthserviceService,
-    private http: HttpClient
+    private http: HttpClient,
+    private usersService: UsersService
   ) {
     this.form = this.fb.group({
       firstName: ['', [Validators.required]],
@@ -132,23 +134,24 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   }
 
   private loadRoles(): void {
-    this.http
-      .get<RoleResponse[]>('http://localhost:8081/api/roles/all')
-      .subscribe({
-        next: (data) => {
-          const map = new Map<string, string>();
-          (data || []).forEach((r) => {
-            if (r.name && r.id && !map.has(r.name)) {
-              map.set(r.name, r.id);
-            }
-          });
-          this.roles = Array.from(map.entries()).map(([name, id]) => ({ id, name }));
-        },
-        error: (err) => {
-          console.error('Failed to load roles for employee form', err);
-          this.roles = [];
-        }
-      });
+    this.usersService.getAllRoles().subscribe({
+      next: (data) => {
+        const map = new Map<string, string>();
+        (data || []).forEach((r: any) => {
+          if (r.name && r.id && !map.has(r.name)) {
+            map.set(r.name, r.id);
+          }
+        });
+        this.roles = Array.from(map.entries()).map(([name, id]) => ({
+          id,
+          name,
+        }));
+      },
+      error: (err) => {
+        console.error('Failed to load roles', err);
+        this.roles = [];
+      },
+    });
   }
 
   submit(): void {
@@ -181,8 +184,8 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
     };
     const employeeId = this.employee?.id;
     const url = employeeId
-      ? `http://localhost:8081/api/admin/employees/${employeeId}`
-      : 'http://localhost:8081/api/admin/employees';
+      ? `https://skillrat.com/user-service/api/admin/employees/${employeeId}`
+      : 'https://skillrat.com/user-service/api/admin/employees';
 
       const httpCall = employeeId
       ? this.http.put(url, payload)
