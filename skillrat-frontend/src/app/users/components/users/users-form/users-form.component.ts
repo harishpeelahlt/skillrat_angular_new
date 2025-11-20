@@ -25,6 +25,7 @@ interface CreateUserPayload {
   selector: 'app-users-form',
   templateUrl: './users-form.component.html',
   styleUrl: './users-form.component.css',
+  standalone: false,
   animations: [
     trigger('backdrop', [
       transition(':enter', [
